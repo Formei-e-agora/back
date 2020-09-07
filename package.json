@@ -4,7 +4,11 @@
   "description": "Projeto do TFG",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:staged": "jest"
+  },
+  "standard": {
+    "env": [ "jest" ]
   },
   "author": "",
   "license": "ISC",

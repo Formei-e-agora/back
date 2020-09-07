@@ -1,0 +1,6 @@
+{
+  "*.js": [
+    "standard 'src/**' --fix",
+    "git add"
+  ]
+}

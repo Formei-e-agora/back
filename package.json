@@ -4,8 +4,8 @@
   "description": "Projeto do TFG",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test:staged": "jest"
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --runInBand --detectOpenHandles",
+    "test:staged": "cross-env NODE_ENV=test jest --testTimeout=10000 --runInBand --detectOpenHandles"
   },
   "standard": {
     "env": [
@@ -15,10 +15,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "git-commit-msg-linter": "^2.6.0",
     "husky": "^4.3.0",
     "jest": "^26.4.2",
     "lint-staged": "^10.3.0",
-    "standard": "^14.3.4"
+    "standard": "^14.3.4",
+    "supertest": "^4.0.2"
   }
 }

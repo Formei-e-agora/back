@@ -1,7 +1,8 @@
 module.exports = {
   roots: ['<rootDir>/src'],
   collectCoverageFrom: [
-    '<rootDir>/src/**/*.js'
+    'job-microservice/src/**/*.js',
+    '!.eslintrc.js'
     // '!<rootDir>/src/main/**',
     // '!<rootDir>/src/**/*-protocols.js',
     // '!**/protocols/**',

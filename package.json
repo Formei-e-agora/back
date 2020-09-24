@@ -8,7 +8,9 @@
     "test:staged": "jest"
   },
   "standard": {
-    "env": [ "jest" ]
+    "env": [
+      "jest"
+    ]
   },
   "author": "",
   "license": "ISC",

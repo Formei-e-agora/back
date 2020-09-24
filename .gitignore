@@ -1,1 +1,8 @@
 /node_modules
+/helpers/node_modules
+
+/person-microservice/node_modules
+/person-microservice/logs
+
+/job-microservice/node_modules
+/job-microservice/logs

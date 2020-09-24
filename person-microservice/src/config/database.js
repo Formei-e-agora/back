@@ -1,0 +1,30 @@
+require('dotenv').config({ path: `${__dirname}/../../.env` });
+module.exports = {
+  production: {
+    username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
+    host: process.env.DATABASE_HOST,
+    port: process.env.DATABASE_PORT,
+    dialect: 'mysql',
+    logging: false,
+  },
+  development: {
+    username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
+    host: process.env.DATABASE_HOST,
+    port: process.env.DATABASE_PORT,
+    dialect: 'mysql',
+    logging: false,
+  },
+  test: {
+    username: 'formeieagora',
+    password: '5$ogF1p%zKA',
+    database: 'test_person',
+    host: 'localhost',
+    port: 3306,
+    dialect: 'mysql',
+    logging: false,
+  }
+};

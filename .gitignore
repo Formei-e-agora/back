@@ -1,8 +1,11 @@
+package-lock.json
 /node_modules
 /helpers/node_modules
 
 /person-microservice/node_modules
 /person-microservice/logs
+/person-microservice/package-lock.json
 
 /job-microservice/node_modules
 /job-microservice/logs
+/job-microservice/package-lock.json

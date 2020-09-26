@@ -1,7 +1,7 @@
 module.exports = {
-  roots: ['person-microservice'],
+  roots: ['person-microservice', 'authentication-microservice'],
   collectCoverageFrom: [
-    '<rootDir>/src/**/*.js'
+    '<rootDir>/src/**/*.js',
     // '!<rootDir>/src/main/**',
     // '!<rootDir>/src/**/*-protocols.js',
     // '!**/protocols/**',
@@ -9,12 +9,12 @@ module.exports = {
   ],
   coveragePathIgnorePatterns: [
     '/node_modules/',
-    '/helpers/'
+    '/helpers/',
   ],
   coverageDirectory: 'coverage',
-  testEnvironment: 'node'
+  testEnvironment: 'node',
   // preset: '@shelf/jest-mongodb',
   // moduleNameMapper: {
   //   '@/(.*)': '<rootDir>/src/$1'
   // }
-}
+};

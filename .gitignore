@@ -2,6 +2,10 @@ package-lock.json
 /node_modules
 /helpers/node_modules
 
+/authentication-microservice/node_modules
+/authentication-microservice/logs
+/authentication-microservice/package-lock.json
+
 /person-microservice/node_modules
 /person-microservice/logs
 /person-microservice/package-lock.json

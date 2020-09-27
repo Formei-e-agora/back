@@ -1,3 +1,4 @@
+const userMiddleware = require('../middlewares/userMiddleware');
 const { Person } = require('../../models');
 const generalDao = require('../../database/dao/generalDao');
 const personDao = require('../../database/dao/personDao');
@@ -6,7 +7,8 @@ const asyncHandler = require('../../../../helpers/handlers/asyncHandler');
 const ErrorResponse = require('../../../../helpers/errors/ErrorResponse');
 
 exports.create = asyncHandler(async (req, res) => {
-  const result = await generalDao.create(Person, req.body);
+  const person = req.body;
+  const result = await generalDao.create(Person, person);
 
   if (!result) {
     throw new ErrorResponse(errors.COULD_NOT_CREATE, result);
@@ -21,12 +23,20 @@ exports.create = asyncHandler(async (req, res) => {
     throw new ErrorResponse(errors.COULD_NOT_CREATE, result);
   }
 
+  const userResponse = await userMiddleware.createUser(result.dataValues.personId, person.username, person.password, person.userType);
+  if (!userResponse) {
+    generalDao.delete(Person, { personId: person.personId });
+    throw new ErrorResponse(errors.COULD_NOT_CREATE, 'could not create user');
+  }
+
   return res.json({ Status: true, personData: result }).end();
 });
 
 exports.update = asyncHandler(async (req, res) => {
-  const result = await generalDao.update(Person, req.body, {
-    personId: req.params.personId,
+  const person = req.body;
+  const { personId } = req.params;
+  const result = await generalDao.update(Person, person, {
+    personId,
   });
 
   if (!result) {
@@ -45,10 +55,20 @@ exports.update = asyncHandler(async (req, res) => {
     throw new ErrorResponse(errors.NOT_FOUND, result);
   }
 
+  const userResponse = await userMiddleware.updateUser(personId, person.username, person.userType, person.eligibleEmail, person.eligiblePush);
+  if (!userResponse) {
+    throw new ErrorResponse(errors.COULD_NOT_UPDATE, 'could not update user');
+  }
+
   return res.json({ Status: true, personData: result[0] }).end();
 });
 
 exports.delete = asyncHandler(async (req, res) => {
+  const userResponse = await userMiddleware.updateUser(req.params.personId);
+  if (!userResponse) {
+    throw new ErrorResponse(errors.COULD_NOT_DELETE, 'could not delete user');
+  }
+
   const result = await generalDao.delete(Person, {
     personId: req.params.personId,
   });

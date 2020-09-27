@@ -9,6 +9,7 @@ module.exports = {
     port: process.env.DATABASE_PORT,
     dialect: 'mysql',
     logging: false,
+    force: false,
   },
   development: {
     username: process.env.DATABASE_USERNAME,
@@ -18,6 +19,7 @@ module.exports = {
     port: process.env.DATABASE_PORT,
     dialect: 'mysql',
     logging: false,
+    force: false,
   },
   test: {
     username: 'formeieagora',
@@ -27,5 +29,6 @@ module.exports = {
     port: 3306,
     dialect: 'mysql',
     logging: false,
+    force: true,
   },
 };

@@ -1,18 +1,17 @@
 const request = require('supertest');
-const db = require('../src/models');
 
-describe('Person Test', () => {
-  beforeAll(async (next) => {
-    await db.sequelize.sync({ alter: true, force: true });
-    next();
-  });
-
+const personTest = () => describe('Person Test', () => {
   const person = {
     personalId: '123.456.789-10',
     name: 'Marcel',
     lastName: 'Mendes',
     phone: '(11) 1111-1111',
     email: 'marcelnogueirasgs@gmail.com',
+    username: 'marcel',
+    password: 'Marcel123',
+    userType: 1,
+    eligibleEmail: true,
+    eligiblePush: false,
   };
 
   let personId;
@@ -62,6 +61,8 @@ describe('Person Test', () => {
 
   it('should update a person', (done) => {
     person.lastName = 'Nogueira';
+    person.userType = 2;
+    delete person.eligiblePush;
     request('localhost:8001')
       .put(`/person/update/${personId}`)
       .send(person)
@@ -111,7 +112,7 @@ describe('Person Test', () => {
   });
 });
 
-describe('Address Test', () => {
+const addressTest = () => describe('Address Test', () => {
   const address = {
     personId: 1,
     address: 'Rua 3',
@@ -187,7 +188,7 @@ describe('Address Test', () => {
   });
 });
 
-// describe('Delete Test', () => {
+// const deletePersonTest = () => describe('Delete Test', () => {
 //   it('should delete an address', (done) => {
 //     request('localhost:8001')
 //       .delete('/person/address/delete/1')
@@ -213,7 +214,8 @@ describe('Address Test', () => {
 //   });
 // });
 
-afterAll((done) => {
-  db.sequelize.close();
-  done();
-});
+module.exports = {
+  personTest,
+  addressTest,
+  // deletePersonTest,
+};

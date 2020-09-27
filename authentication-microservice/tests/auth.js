@@ -1,5 +1,5 @@
 const request = require('supertest');
-const db = require('../src/models');
+// const db = require('../src/models');
 
 const user = {
   userId: 1,
@@ -10,29 +10,28 @@ const user = {
   eligiblePush: false,
 };
 
-let userId;
-
-describe('User Test', () => {
+const userTest = () => describe('User Test', () => {
   beforeAll(async (next) => {
-    await db.sequelize.sync({ alter: true, force: true });
+    // await db.sequelize.sync({ alter: true, force: true });
     next();
   });
+  const userId = 1;
 
-  it('should create a user', (done) => {
-    request('localhost:8000')
-      .post('/user/create')
-      .send(user)
-      .end((err, res) => {
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty('Status');
-        expect(res.body.Status).toBe(true);
-        expect(res.body).toHaveProperty('userData');
-        expect(res.body.userData).toHaveProperty('userId');
-        userId = res.body.userData.userId;
+  // it('should create a user', (done) => {
+  //   request('localhost:8000')
+  //     .post('/user/create')
+  //     .send(user)
+  //     .end((err, res) => {
+  //       expect(res.statusCode).toEqual(200);
+  //       expect(res.body).toHaveProperty('Status');
+  //       expect(res.body.Status).toBe(true);
+  //       expect(res.body).toHaveProperty('userData');
+  //       expect(res.body.userData).toHaveProperty('userId');
+  //       userId = res.body.userData.userId;
 
-        done();
-      });
-  });
+  //       done();
+  //     });
+  // });
 
   it('should verify if a user exists', (done) => {
     request('localhost:8000')
@@ -46,21 +45,21 @@ describe('User Test', () => {
       });
   });
 
-  it('should update a user', (done) => {
-    user.eligiblePush = true;
-    request('localhost:8000')
-      .put(`/user/update/${userId}`)
-      .send(user)
-      .end((err, res) => {
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty('Status');
-        expect(res.body.Status).toBe(true);
-        expect(res.body).toHaveProperty('userData');
-        expect(res.body.userData).toBe(1);
+  // it('should update a user', (done) => {
+  //   user.eligiblePush = true;
+  //   request('localhost:8000')
+  //     .put(`/user/update/${userId}`)
+  //     .send(user)
+  //     .end((err, res) => {
+  //       expect(res.statusCode).toEqual(200);
+  //       expect(res.body).toHaveProperty('Status');
+  //       expect(res.body.Status).toBe(true);
+  //       expect(res.body).toHaveProperty('userData');
+  //       expect(res.body.userData).toBe(1);
 
-        done();
-      });
-  });
+  //       done();
+  //     });
+  // });
 
   it('should find a user', (done) => {
     request('localhost:8000')
@@ -73,14 +72,15 @@ describe('User Test', () => {
         expect(res.body.userData).toHaveProperty('userId');
         expect(res.body.userData.userId).toEqual(userId);
         expect(res.body.userData).toHaveProperty('eligiblePush');
-        expect(res.body.userData.eligiblePush).toBe(true);
+        // expect(res.body.userData.eligiblePush).toBe(true);
 
         done();
       });
   });
 });
 
-describe('Auth Test', () => {
+const authTest = () => describe('Auth Test', () => {
+  const userId = 1;
   const loginInfo = {
     username: 'marcel',
     password: 'Marcel123',
@@ -151,7 +151,8 @@ describe('Auth Test', () => {
   });
 });
 
-// describe('Delete Test', () => {
+// const deleteAuthTest = () => describe('Delete Test', () => {
+//   const userId = 1;
 //   it('should delete an user', (done) => {
 //     request('localhost:8000')
 //       .delete(`/user/delete/${userId}`)
@@ -166,6 +167,12 @@ describe('Auth Test', () => {
 // });
 
 afterAll((done) => {
-  db.sequelize.close();
+  // db.sequelize.close();
   done();
 });
+
+module.exports = {
+  userTest,
+  authTest,
+  // deleteAuthTest,
+};

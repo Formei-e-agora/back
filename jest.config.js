@@ -1,5 +1,5 @@
 module.exports = {
-  roots: ['person-microservice', 'authentication-microservice'],
+  // roots: ['person-microservice', 'authentication-microservice'],
   collectCoverageFrom: [
     '<rootDir>/src/**/*.js',
     // '!<rootDir>/src/main/**',

@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const generator = require('generate-password');
 const { Users } = require('../../models');
-const { findByUsername, findByPk } = require('../../database/dao/userDao');
+const { findByUsername } = require('../../database/dao/userDao');
 const generalDao = require('../../database/dao/generalDao');
 const errors = require('../../../../helpers/errors/errorCodes');
 const ErrorResponse = require('../../../../helpers/errors/ErrorResponse');
@@ -10,7 +10,7 @@ const asyncHandler = require('../../../../helpers/handlers/asyncHandler');
 const sendEmail = require('../../../../helpers/email/sendEmail');
 const options = require('../../config/jwtOptions');
 
-exports.Login = asyncHandler(async (req, res) => {
+exports.login = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   const response = await findByUsername(Users, username);
 
@@ -54,7 +54,7 @@ exports.Login = asyncHandler(async (req, res) => {
   return res.json({ Status: true, token, userData }).end();
 });
 
-exports.SignUp = asyncHandler(async (req, res) => {
+exports.create = asyncHandler(async (req, res) => {
   const response = await generalDao.create(Users, req.body);
 
   if (!response) {
@@ -69,11 +69,14 @@ exports.SignUp = asyncHandler(async (req, res) => {
   if (response.name === 'SequelizeDatabaseError') {
     throw new ErrorResponse(errors.COULD_NOT_CREATE, response);
   }
+  if (response.name === 'SequelizeValidationError') {
+    throw new ErrorResponse(errors.COULD_NOT_CREATE, response);
+  }
 
   return res.json({ Status: true, userData: response });
 });
 
-exports.Update = asyncHandler(async (req, res) => {
+exports.update = asyncHandler(async (req, res) => {
   const { userId } = req.params;
 
   const response = await generalDao.update(Users, req.body, { userId });
@@ -97,7 +100,7 @@ exports.Update = asyncHandler(async (req, res) => {
   return res.json({ Status: true, userData: response[0] });
 });
 
-exports.Delete = asyncHandler(async (req, res) => {
+exports.delete = asyncHandler(async (req, res) => {
   const { userId } = req.params;
 
   const result = await generalDao.delete(Users, { userId });
@@ -118,7 +121,7 @@ exports.Delete = asyncHandler(async (req, res) => {
   return res.json({ Status: true });
 });
 
-exports.ChangePassword = asyncHandler(async (req, res) => {
+exports.changePassword = asyncHandler(async (req, res) => {
   const { password, newPassword, userId } = req.body;
 
   if (!password || !newPassword || newPassword === '') {
@@ -224,7 +227,7 @@ exports.findByPk = asyncHandler(async (req, res) => {
   return res.json({ Status: true, userData: result }).end();
 });
 
-exports.Protected = asyncHandler(async (req, res) => res.json({ Status: true }));
+exports.protected = asyncHandler(async (req, res) => res.json({ Status: true }));
 
 exports.verifyUserExists = asyncHandler(async (req, res) => {
   const result = await generalDao.verifyIfExistsById(Users, req.params.userId);

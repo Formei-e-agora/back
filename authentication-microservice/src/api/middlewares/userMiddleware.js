@@ -6,7 +6,7 @@ const asyncHandler = require('../../../../helpers/handlers/asyncHandler');
 
 exports.findPersonByEmail = asyncHandler(async (req, res, next) => {
   const { email } = req.body;
-  const result = await fetch(`${links.person}person/find/email/${email}`, {
+  const result = await fetch(`${links.person}/person/find/email/${email}`, {
     method: 'GET',
   });
   const jsonResult = await result.json();

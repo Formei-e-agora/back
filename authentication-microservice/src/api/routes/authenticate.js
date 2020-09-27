@@ -10,12 +10,12 @@ module.exports = (server, passport) => {
 
   route.get('/verify/userId/:userId', authenticate.verifyUserExists);
   route.get('/find/userId/:userId', authenticate.findByPk);
-  route.get('/protected', passport.authenticate('jwt', { session: false }), authenticate.Protected);
-  route.post('/login', verifyMiddleware.loginLimiter, authenticate.Login);
-  route.post('/create', authenticate.SignUp);
+  route.get('/protected', passport.authenticate('jwt', { session: false }), authenticate.protected);
+  route.post('/login', verifyMiddleware.loginLimiter, authenticate.login);
+  route.post('/create', authenticate.create);
   route.post('/reset/password', userMiddleware.findPersonByEmail, authenticate.restorePassword);
-  route.put('/update/password', /* passport.authenticate('jwt', { session: false }), */ authenticate.ChangePassword);
-  route.put('/update/:userId', /* passport.authenticate('jwt', { session: false }), */ authenticate.Update);
+  route.put('/update/password', /* passport.authenticate('jwt', { session: false }), */ authenticate.changePassword);
+  route.put('/update/:userId', /* passport.authenticate('jwt', { session: false }), */ authenticate.update);
   route.put('/unlock/userId/:userId', authenticate.unlockAccount);
-  route.delete('/delete/:userId', /* passport.authenticate('jwt', { session: false }), */ authenticate.Delete);
+  route.delete('/delete/:userId', /* passport.authenticate('jwt', { session: false }), */ authenticate.delete);
 };

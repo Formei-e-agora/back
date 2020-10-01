@@ -20,9 +20,9 @@ module.exports = (sequelize, Sequelize) => {
     },
   });
 
-  CourseRequirements.associate = function associate(models) {
-    CourseRequirements.belongsTo(models.Job, { foreignKey: 'jobId', as: 'job' });
+  CourseRequirement.associate = function associate(models) {
+    CourseRequirement.belongsTo(models.Job, { foreignKey: 'jobId', as: 'job' });
   };
 
-  return CourseRequirements;
+  return CourseRequirement;
 };

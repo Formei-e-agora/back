@@ -55,7 +55,7 @@ module.exports = (sequelize, Sequelize) => {
 
   Job.associate = function associate(models) {
     Job.hasMany(models.Subscription, { as: 'subscription', foreignKey: 'jobId' });
-    Job.hasMany(models.CourseRequirements, { as: 'courseRequirements', foreignKey: 'jobId' });
+    Job.hasMany(models.CourseRequirement, { as: 'courseRequirement', foreignKey: 'jobId' });
   };
 
   return Job;

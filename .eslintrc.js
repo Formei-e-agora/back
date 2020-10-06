@@ -3,6 +3,7 @@ module.exports = {
     node: true,
     commonjs: true,
     es6: true,
+    jest: true,
   },
   extends: [
     'airbnb-base',
@@ -17,8 +18,8 @@ module.exports = {
   },
   rules: {
     'no-console': 0,
-    'max-len': ["error", { "code": 200 }],
-    "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
-    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
+    'max-len': ['error', { code: 200 }],
+    'no-restricted-syntax': ['error', 'ForInStatement', 'LabeledStatement', 'WithStatement'],
+    'no-underscore-dangle': ['error', { allow: ['_id'] }],
   },
 };

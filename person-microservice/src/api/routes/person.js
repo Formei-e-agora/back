@@ -9,6 +9,7 @@ module.exports = (server) => {
   route.get('/verify/personId/:personId', personServices.verifyPersonExists);
   route.get('/find/all', personServices.findAll);
   route.get('/find/personId/:personId', personServices.findByPk);
+  route.get('/find/email/:email', personServices.findByEmail);
   route.post('/create', personServices.create);
   route.put('/update/:personId', personServices.update);
   route.delete('/delete/:personId', personServices.delete);

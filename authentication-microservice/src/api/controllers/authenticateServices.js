@@ -179,7 +179,7 @@ exports.restorePassword = asyncHandler(async (req, res) => {
     uppercase: true,
     strict: true,
   });
-  // sendEmail.sendPass(email, generatedPassword, person.name);
+  sendEmail.sendPass(email, generatedPassword, person.name);
 
   const updateSparePassword = { sparePassword: true, password: generatedPassword };
   const result2 = await generalDao.update(Users, updateSparePassword, { userId: user.userId });

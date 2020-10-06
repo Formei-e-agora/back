@@ -1,7 +1,7 @@
 const express = require('express');
 const loaders = require('./loaders');
 
-require('dotenv').config({ path: `${__dirname}/.env` });
+require('dotenv').config({ path: `${__dirname}/../.env` });
 
 let server;
 

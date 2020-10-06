@@ -1,5 +1,5 @@
 const { ExtractJwt } = require('passport-jwt');
-require('dotenv').config({ path: `${__dirname}/../.env` });
+require('dotenv').config({ path: `${__dirname}/../../.env` });
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

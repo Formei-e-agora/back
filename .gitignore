@@ -1,4 +1,5 @@
 package-lock.json
+/.google
 /node_modules
 /helpers/node_modules
 

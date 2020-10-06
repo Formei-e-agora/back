@@ -1,12 +1,13 @@
 const express = require('express')
 const loaders = require('./loaders')
 require('dotenv').config({ path: `${__dirname}/../.env` })
+let server
 
-async function startServer () {
+function startServer () {
   const app = express()
-  await loaders({ expressApp: app })
+  loaders({ expressApp: app })
 
-  app.listen(process.env.PORT, (err) => {
+  server = app.listen(process.env.PORT, (err) => {
     if (err) {
       console.log(err)
       return
@@ -15,3 +16,5 @@ async function startServer () {
   })
 }
 startServer()
+
+module.exports = server

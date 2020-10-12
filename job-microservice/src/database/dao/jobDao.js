@@ -40,3 +40,41 @@ exports.findByProfessorId = async (model, id, number) => {
     return e;
   }
 };
+
+exports.findMostPopular = async (model) => {
+  const logFilePath = path.join(__dirname, '../../../logs/dao.log');
+  const action = `findMostPopular ${model.name}`;
+  try {
+    const result = await model.findAll({
+      include: ['subscription'],
+    });
+    const most = [];
+    result.forEach(e => {
+      if (e.subscription.length > 0) {
+        most.push({
+          'jobId' : e.jobId,
+          'subsNum' : e.subscription.length
+        });
+      }
+    });
+    if (most.length > 5) {
+      most.sort((a, b) => (a.subsNum > b.subsNum) ? -1 : (b.subsNum > a.subsNum) ? 1 : 0)
+      ids = [];
+      for (i = 0; i < 5; i++) {
+        console.log(most[i])
+        ids.push(most[i].jobId)
+      }
+      console.log(ids)
+      const res = await model.findAll({ where: { jobId: ids } });
+      console.log(result)
+      logHandler.success(logFilePath, action);
+      return res;
+    } else {
+      logHandler.success(logFilePath, action);
+      return result;
+    }
+  } catch (e) {
+    logHandler.failure(logFilePath, action, e);
+    return e;
+  }
+};

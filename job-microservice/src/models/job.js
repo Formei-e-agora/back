@@ -8,7 +8,6 @@ module.exports = (sequelize, Sequelize) => {
     },
     professorId: {
       allowNull: false,
-      unique: true,
       type: Sequelize.BIGINT(11),
     },
     title: {

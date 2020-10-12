@@ -1,11 +1,11 @@
-const { CourseRequirements } = require('../../models');
+const { CourseRequirement } = require('../../models');
 const generalDao = require('../../database/dao/generalDao');
 const errors = require('../../../../helpers/errors/errorCodes');
 const asyncHandler = require('../../../../helpers/handlers/asyncHandler');
 const ErrorResponse = require('../../../../helpers/errors/ErrorResponse');
 
 exports.create = asyncHandler(async (req, res) => {
-  const result = await generalDao.create(CourseRequirements, req.body);
+  const result = await generalDao.create(CourseRequirement, req.body);
 
   if (!result) {
     throw new ErrorResponse(errors.COULD_NOT_CREATE, result);
@@ -26,7 +26,7 @@ exports.create = asyncHandler(async (req, res) => {
 exports.update = asyncHandler(async (req, res, next) => {
   const { courseRequirementsId } = req.params;
 
-  const result = await generalDao.update(CourseRequirements, req.body, { courseRequirementsId });
+  const result = await generalDao.update(CourseRequirement, req.body, { courseRequirementsId });
 
   if (!result) {
     throw new ErrorResponse(errors.COULD_NOT_UPDATE, result);
@@ -50,7 +50,7 @@ exports.update = asyncHandler(async (req, res, next) => {
 exports.delete = asyncHandler(async (req, res, next) => {
   const { courseRequirementsId } = req.params;
 
-  const result = await generalDao.delete(CourseRequirements, { courseRequirementsId });
+  const result = await generalDao.delete(CourseRequirement, { courseRequirementsId });
 
   if (!result) {
     throw new ErrorResponse(errors.NOT_FOUND, result);
@@ -69,7 +69,7 @@ exports.delete = asyncHandler(async (req, res, next) => {
 });
 
 exports.findByPk = asyncHandler(async (req, res) => {
-  const result = await generalDao.findByPk(CourseRequirements, req.params.courseRequirementsId);
+  const result = await generalDao.findByPk(CourseRequirement, req.params.courseRequirementsId);
 
   if (!result) {
     throw new ErrorResponse(errors.NOT_FOUND, result);
@@ -79,7 +79,7 @@ exports.findByPk = asyncHandler(async (req, res) => {
 });
 
 exports.verifyCourseRequirementsExists = asyncHandler(async (req, res) => {
-  const result = await generalDao.verifyIfExistsById(CourseRequirements, req.params.courseRequirementsId);
+  const result = await generalDao.verifyIfExistsById(CourseRequirement, req.params.courseRequirementsId);
 
   if (result) {
     return res.json({ Status: true }).end();

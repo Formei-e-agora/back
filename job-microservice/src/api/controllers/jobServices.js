@@ -108,7 +108,7 @@ exports.findByCourse = asyncHandler(async (req, res) => {
   jobIds.forEach(e => {
     ids.push(e.jobId)
   });
-  const result = await jobDao.findMany(Job, ids);
+  const result = await jobDao.findMany(Job, ids, req.params.number);
   if (!result) {
     throw new ErrorResponse(errors.NOT_FOUND, result);
   }

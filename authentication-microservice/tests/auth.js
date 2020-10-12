@@ -1,5 +1,4 @@
 const request = require('supertest');
-// const db = require('../src/models');
 
 const user = {
   userId: 1,
@@ -91,6 +90,32 @@ const authTest = () => describe('Auth Test', () => {
       .post('/user/login')
       .send(loginInfo)
       .end((err, res) => {
+        expect(res.statusCode).toEqual(401);
+        expect(res.body).toHaveProperty('Status');
+        expect(res.body.Status).toBe(false);
+        expect(res.body).toHaveProperty('Error');
+        expect(res.body.Error).toBe(8002);
+        done();
+      });
+  });
+
+  it('should accept user', (done) => {
+    request('localhost:8000')
+      .put(`/user/accept/${userId}`)
+      .send(loginInfo)
+      .end((err, res) => {
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toHaveProperty('Status');
+        expect(res.body.Status).toBe(true);
+        done();
+      });
+  });
+
+  it('should login', (done) => {
+    request('localhost:8000')
+      .post('/user/login')
+      .send(loginInfo)
+      .end((err, res) => {
         expect(res.statusCode).toEqual(200);
         expect(res.body).toHaveProperty('Status');
         expect(res.body.Status).toBe(true);
@@ -117,6 +142,78 @@ const authTest = () => describe('Auth Test', () => {
         expect(res.body).toHaveProperty('userData');
         expect(res.body.userData).toBe(1);
 
+        done();
+      });
+  });
+
+  it('should lock by wrong password', async (done) => {
+    request('localhost:8000')
+      .post('/user/login')
+      .send(loginInfo)
+      .end((err, res) => {
+        expect(res.statusCode).toEqual(401);
+        expect(res.body).toHaveProperty('Status');
+        expect(res.body.Status).toBe(false);
+        expect(res.body).toHaveProperty('Error');
+        expect(res.body.Error).toBe(8003);
+
+        request('localhost:8000')
+          .post('/user/login')
+          .send(loginInfo)
+          .end((err1, res1) => {
+            expect(res1.statusCode).toEqual(401);
+            expect(res1.body).toHaveProperty('Status');
+            expect(res1.body.Status).toBe(false);
+            expect(res1.body).toHaveProperty('Error');
+            expect(res1.body.Error).toBe(8003);
+
+            request('localhost:8000')
+              .post('/user/login')
+              .send(loginInfo)
+              .end((err2, res2) => {
+                expect(res2.statusCode).toEqual(401);
+                expect(res2.body).toHaveProperty('Status');
+                expect(res2.body.Status).toBe(false);
+                expect(res2.body).toHaveProperty('Error');
+                expect(res2.body.Error).toBe(8003);
+
+                request('localhost:8000')
+                  .post('/user/login')
+                  .send(loginInfo)
+                  .end((err3, res3) => {
+                    expect(res3.statusCode).toEqual(401);
+                    expect(res3.body).toHaveProperty('Status');
+                    expect(res3.body.Status).toBe(false);
+                    expect(res3.body).toHaveProperty('Error');
+                    expect(res3.body.Error).toBe(8003);
+
+                    request('localhost:8000')
+                      .post('/user/login')
+                      .send(loginInfo)
+                      .end((err4, res4) => {
+                        expect(res4.statusCode).toEqual(401);
+                        expect(res4.body).toHaveProperty('Status');
+                        expect(res4.body.Status).toBe(false);
+                        expect(res4.body).toHaveProperty('Error');
+                        expect(res4.body.Error).toBe(8003);
+                        done();
+                      });
+                  });
+              });
+          });
+      });
+  });
+
+  it('should check if user is locked', (done) => {
+    request('localhost:8000')
+      .post('/user/login')
+      .send(loginInfo)
+      .end((err, res) => {
+        expect(res.statusCode).toEqual(401);
+        expect(res.body).toHaveProperty('Status');
+        expect(res.body.Status).toBe(false);
+        expect(res.body).toHaveProperty('Error');
+        expect(res.body.Error).toBe(8001);
         done();
       });
   });
@@ -165,11 +262,6 @@ const authTest = () => describe('Auth Test', () => {
 //       });
 //   });
 // });
-
-afterAll((done) => {
-  // db.sequelize.close();
-  done();
-});
 
 module.exports = {
   userTest,

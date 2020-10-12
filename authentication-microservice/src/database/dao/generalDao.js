@@ -16,7 +16,7 @@ exports.create = async (model, object) => {
 
 exports.update = async (model, object, id) => {
   const logFilePath = path.join(__dirname, '../../../logs/dao.log');
-  const action = `update ${model.name} id=${id.id}`;
+  const action = `update ${model.name} id=${id.userId}`;
   try {
     const user = object;
     const result = await model.update(user, {

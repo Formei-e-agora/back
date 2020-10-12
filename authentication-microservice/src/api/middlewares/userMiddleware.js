@@ -18,3 +18,20 @@ exports.findPersonByEmail = asyncHandler(async (req, res, next) => {
 
   next();
 });
+
+exports.findPersonById = async (personId) => {
+  try {
+    const result = await fetch(`${links.person}/person/find/personId/${personId}`, {
+      method: 'GET',
+    });
+    const jsonResult = await result.json();
+
+    if (jsonResult.Status !== true) {
+      throw new ErrorResponse(errors.NOT_FOUND, jsonResult);
+    }
+    return jsonResult.personData;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};

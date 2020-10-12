@@ -53,7 +53,7 @@ exports.findByPk = async (model, id) => {
   const action = `findByPk ${model.name} id=${id}`;
   try {
     const result = await model.findByPk(id, {
-      attributes: ['username', 'loginAttempts', 'sparePassword'],
+      attributes: ['isAccepted', 'loginAttempts'],
     });
     logHandler.success(logFilePath, action);
     return result;

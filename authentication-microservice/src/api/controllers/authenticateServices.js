@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const generator = require('generate-password');
+const userMiddleware = require('../middlewares/userMiddleware');
 const { Users } = require('../../models');
 const { findByUsername } = require('../../database/dao/userDao');
+const userDao = require('../../database/dao/userDao');
 const generalDao = require('../../database/dao/generalDao');
 const errors = require('../../../../helpers/errors/errorCodes');
 const ErrorResponse = require('../../../../helpers/errors/ErrorResponse');
@@ -22,12 +24,15 @@ exports.login = asyncHandler(async (req, res) => {
   }
 
   const {
-    userType, loginAttempts, userId,
+    userType, loginAttempts, userId, isAccepted,
   } = response.dataValues;
   const userPassword = response.dataValues.password;
 
   if (loginAttempts >= 5) {
     throw new ErrorResponse(errors.ACCOUNT_LOCKED, loginAttempts);
+  }
+  if (isAccepted !== true) {
+    throw new ErrorResponse(errors.NOT_ACCEPTED, 'not accepted');
   }
   if (!bcrypt.compareSync(password, userPassword)) {
     let updatedLoginAttempts = loginAttempts || 0;
@@ -49,7 +54,14 @@ exports.login = asyncHandler(async (req, res) => {
     userType,
   };
   const token = jwt.sign(payload, options.secretOrKey, { expiresIn: '1h' });
-  const userData = response.dataValues;
+  const personData = await userMiddleware.findPersonById(userId);
+  if (!personData) {
+    throw new ErrorResponse(errors.NOT_FOUND, 'person');
+  }
+  delete personData.createdAt;
+  delete personData.updatedAt;
+  delete personData.personId;
+  const userData = { ...response.dataValues, ...personData };
 
   return res.json({ Status: true, token, userData }).end();
 });
@@ -80,6 +92,30 @@ exports.update = asyncHandler(async (req, res) => {
   const { userId } = req.params;
 
   const response = await generalDao.update(Users, req.body, { userId });
+
+  if (!response) {
+    throw new ErrorResponse(errors.WRONG_PARAMETERS, response);
+  }
+  if (response.name === 'SequelizeUniqueConstraintError') {
+    throw new ErrorResponse(errors.COULD_NOT_UPDATE, response);
+  }
+  if (response.name === 'SequelizeForeignKeyConstraintError') {
+    throw new ErrorResponse(errors.COULD_NOT_UPDATE, response);
+  }
+  if (response.name === 'SequelizeDatabaseError') {
+    throw new ErrorResponse(errors.COULD_NOT_UPDATE, response);
+  }
+  if (response.length === 0) {
+    throw new ErrorResponse(errors.NOT_FOUND, response);
+  }
+
+  return res.json({ Status: true, userData: response[0] });
+});
+
+exports.acceptUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const response = await generalDao.update(Users, { isAccepted: true }, { userId });
 
   if (!response) {
     throw new ErrorResponse(errors.WRONG_PARAMETERS, response);
@@ -223,6 +259,16 @@ exports.findByPk = asyncHandler(async (req, res) => {
     throw new ErrorResponse(errors.NOT_FOUND, result);
   }
   delete result.dataValues.password;
+
+  return res.json({ Status: true, userData: result }).end();
+});
+
+exports.findUnlockInfo = asyncHandler(async (req, res) => {
+  const result = await userDao.findByPk(Users, req.params.userId);
+
+  if (!result) {
+    throw new ErrorResponse(errors.NOT_FOUND, result);
+  }
 
   return res.json({ Status: true, userData: result }).end();
 });

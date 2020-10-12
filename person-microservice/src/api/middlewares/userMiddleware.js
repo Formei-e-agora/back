@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
 const links = require('../../../../helpers/links');
+const errors = require('../../../../helpers/errors/errorCodes');
+const ErrorResponse = require('../../../../helpers/errors/ErrorResponse');
 
 async function createUser(userId, username, password, userType, eligibleEmail, eligiblePush) {
   const response = await fetch(`${links.auth}/user/create`, {
@@ -38,6 +40,20 @@ async function updateUser(userId, username, userType, eligibleEmail, eligiblePus
   return jsonResponse.Status;
 }
 
+async function findUnlockInfo(userId) {
+  try {
+    const response = await fetch(`${links.auth}/user/find/unlockInfo/userId/${userId}`, { method: 'GET' });
+    const jsonResponse = await response.json();
+    if (jsonResponse.Status !== true) {
+      throw new ErrorResponse(errors.NOT_FOUND, 'user');
+    }
+    return jsonResponse.userData;
+  } catch (error) {
+    console.log(error);
+    throw new ErrorResponse(errors.NOT_FOUND, 'user');
+  }
+}
+
 async function deleteUser(userId) {
   const response = await fetch(`${links.auth}/user/delete/${userId}`, { method: 'DELETE' });
   const jsonResponse = await response.json();
@@ -47,5 +63,6 @@ async function deleteUser(userId) {
 module.exports = {
   createUser,
   updateUser,
+  findUnlockInfo,
   deleteUser,
 };

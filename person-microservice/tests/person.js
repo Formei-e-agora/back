@@ -53,7 +53,11 @@ const personTest = () => describe('Person Test', () => {
         expect(res.body.Status).toBe(true);
         expect(res.body).toHaveProperty('people');
         expect(Array.isArray(res.body.people)).toBe(true);
-        // expect(res.body.people).toContain(person);
+        expect(res.body.people.length).toBeGreaterThan(0);
+        expect(res.body.people[0]).toHaveProperty('loginAttempts');
+        expect(res.body.people[0]).toHaveProperty('isAccepted');
+        expect(res.body.people[0]).toHaveProperty('personId');
+        expect(res.body.people[0]).toHaveProperty('name');
 
         done();
       });
@@ -173,6 +177,23 @@ const addressTest = () => describe('Address Test', () => {
   it('should find an address', (done) => {
     request('localhost:8001')
       .get(`/person/address/find/addressId/${addressId}`)
+      .end((err, res) => {
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toHaveProperty('Status');
+        expect(res.body.Status).toBe(true);
+        expect(res.body).toHaveProperty('addressData');
+        expect(res.body.addressData).toHaveProperty('addressId');
+        expect(res.body.addressData.addressId).toEqual(addressId);
+        expect(res.body.addressData).toHaveProperty('address');
+        expect(res.body.addressData.address).toBe('AV BPS');
+
+        done();
+      });
+  });
+
+  it('should find an address by userId', (done) => {
+    request('localhost:8001')
+      .get(`/person/address/find/personId/${address.personId}`)
       .end((err, res) => {
         expect(res.statusCode).toEqual(200);
         expect(res.body).toHaveProperty('Status');

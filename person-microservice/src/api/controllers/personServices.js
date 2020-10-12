@@ -119,7 +119,16 @@ exports.findAll = asyncHandler(async (req, res) => {
     throw new ErrorResponse(errors.NOT_FOUND, result);
   }
 
-  return res.json({ Status: true, people: result }).end();
+  const people = await Promise.all(result.map(async (person) => {
+    const personData = person.dataValues;
+    const userData = await userMiddleware.findUnlockInfo(personData.personId);
+    if (!userData) {
+      throw new ErrorResponse(errors.NOT_FOUND, 'user');
+    }
+    return { ...personData, ...userData };
+  }));
+
+  return res.json({ Status: true, people }).end();
 });
 
 exports.verifyPersonExists = asyncHandler(async (req, res) => {

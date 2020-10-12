@@ -1,8 +1,10 @@
-const { Job } = require('../../models');
+const { Job, CourseRequirement } = require('../../models');
 const generalDao = require('../../database/dao/generalDao');
 const errors = require('../../../../helpers/errors/errorCodes');
 const asyncHandler = require('../../../../helpers/handlers/asyncHandler');
 const ErrorResponse = require('../../../../helpers/errors/ErrorResponse');
+const courseRequirementDao = require('../../database/dao/courseRequirementDao');
+const jobDao = require('../../database/dao/jobDao');
 
 exports.create = asyncHandler(async (req, res) => {
   const result = await generalDao.create(Job, req.body);
@@ -98,4 +100,21 @@ exports.verifyJobExists = asyncHandler(async (req, res) => {
     return res.json({ Status: true }).end();
   }
   return res.json({ Status: false }).end();
+});
+
+exports.findByCourse = asyncHandler(async (req, res) => {
+  const jobIds = await courseRequirementDao.findByCourse(CourseRequirement, req.params.course);
+  ids = [];
+  jobIds.forEach(e => {
+    ids.push(e.jobId)
+  });
+  const result = await jobDao.findMany(Job, ids);
+  if (!result) {
+    throw new ErrorResponse(errors.NOT_FOUND, result);
+  }
+  if (!result.length) {
+    throw new ErrorResponse(errors.NOT_FOUND, result);
+  }
+
+  return res.json({ Status: true, jobs: result }).end();
 });

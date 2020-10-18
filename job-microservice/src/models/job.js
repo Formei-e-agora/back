@@ -24,7 +24,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     description: {
       allowNull: false,
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(1000),
     },
     experience: {
       allowNull: false,

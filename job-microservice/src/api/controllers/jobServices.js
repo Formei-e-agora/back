@@ -142,3 +142,15 @@ exports.findMostPopular = asyncHandler(async (req, res) => {
 
   return res.json({ Status: true, jobs: result }).end();
 });
+
+exports.findLastJobs = asyncHandler(async (req, res) => {
+  const result = await jobDao.findLastJobs(Job)
+  if (!result) {
+    throw new ErrorResponse(errors.NOT_FOUND, result);
+  }
+  if (!result.length) {
+    throw new ErrorResponse(errors.NOT_FOUND, result);
+  }
+
+  return res.json({ Status: true, jobs: result }).end();
+});

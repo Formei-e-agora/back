@@ -49,7 +49,12 @@ exports.findByPk = async (model, id) => {
   const logFilePath = path.join(__dirname, '../../../logs/dao.log');
   const action = `findByPk ${model.name} id=${id}`;
   try {
-    const result = await model.findByPk(id);
+    const result = await model.findOne({
+      where: {
+        jobId: id,
+      },
+      include: ['subscription', 'courseRequirement'],
+    });
     logHandler.success(logFilePath, action);
     return result;
   } catch (e) {

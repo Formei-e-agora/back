@@ -11,6 +11,7 @@ module.exports = (server) => {
   route.get('/find/jobId/:jobId', jobServices.findByPk);
   route.get('/find/course/:course/number/:number', jobServices.findByCourse);
   route.get('/find/professorId/:professorId/number/:number', jobServices.findByProfessorId);
+  route.get('/find/lastJobs', jobServices.findLastJobs);
   route.get('/find/mostPopular', jobServices.findMostPopular);
   route.post('/create', jobServices.create);
   route.put('/update/:jobId', jobServices.update);

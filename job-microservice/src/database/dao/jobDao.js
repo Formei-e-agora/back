@@ -1,4 +1,5 @@
 const path = require('path');
+const { Op } = require('sequelize');
 const logHandler = require('../../../../helpers/handlers/logHandler');
 
 exports.findMany = async (model, ids, number) => {
@@ -11,7 +12,10 @@ exports.findMany = async (model, ids, number) => {
         jobId: ids,
       },
       include: ['subscription', 'courseRequirement'],
-      limit: number
+      limit: number,
+      order: [
+        ['createdAt', 'DESC']
+      ]
     });
     logHandler.success(logFilePath, action);
     return result;
@@ -31,7 +35,10 @@ exports.findByProfessorId = async (model, id, number) => {
         professorId: id,
       },
       include: ['subscription', 'courseRequirement'],
-      limit: number
+      limit: number,
+      order: [
+        ['createdAt', 'DESC']
+      ]
     });
     logHandler.success(logFilePath, action);
     return result;
@@ -73,6 +80,31 @@ exports.findMostPopular = async (model) => {
       logHandler.success(logFilePath, action);
       return result;
     }
+  } catch (e) {
+    logHandler.failure(logFilePath, action, e);
+    return e;
+  }
+};
+
+exports.findLastJobs = async (model) => {
+  const logFilePath = path.join(__dirname, '../../../logs/dao.log');
+  const action = `findLastJobs ${model.name}`;
+  const yesterday = new Date()
+  yesterday.setDate(yesterday.getDate() - 1)
+  try {
+    const result = await model.findAll({
+      where: {
+        createdAt: {
+          [Op.gte]: yesterday
+        }
+      },
+      include: ['subscription', 'courseRequirement'],
+      order: [
+        ['createdAt', 'DESC']
+      ]
+    });
+    logHandler.success(logFilePath, action);
+    return result;
   } catch (e) {
     logHandler.failure(logFilePath, action, e);
     return e;

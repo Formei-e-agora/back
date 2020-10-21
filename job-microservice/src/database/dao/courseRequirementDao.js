@@ -8,7 +8,7 @@ exports.findByCourse = async (model, course) => {
     const result = await model.findAll({
       attributes: ['jobId'],
       where: {
-        course: course,
+        course,
       },
     });
     logHandler.success(logFilePath, action);

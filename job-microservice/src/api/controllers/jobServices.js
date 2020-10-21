@@ -71,7 +71,7 @@ exports.delete = asyncHandler(async (req, res) => {
 });
 
 exports.findByPk = asyncHandler(async (req, res) => {
-  const result = await generalDao.findByPk(Job, req.params.jobId);
+  const result = await jobDao.findByPkWithInclude(Job, req.params.jobId);
 
   if (!result) {
     throw new ErrorResponse(errors.NOT_FOUND, result);
@@ -104,9 +104,9 @@ exports.verifyJobExists = asyncHandler(async (req, res) => {
 
 exports.findByCourse = asyncHandler(async (req, res) => {
   const jobIds = await courseRequirementDao.findByCourse(CourseRequirement, req.params.course);
-  ids = [];
-  jobIds.forEach(e => {
-    ids.push(e.jobId)
+  const ids = [];
+  jobIds.forEach((e) => {
+    ids.push(e.jobId);
   });
   const result = await jobDao.findMany(Job, ids, req.params.number);
   if (!result) {
@@ -144,7 +144,7 @@ exports.findMostPopular = asyncHandler(async (req, res) => {
 });
 
 exports.findLastJobs = asyncHandler(async (req, res) => {
-  const result = await jobDao.findLastJobs(Job)
+  const result = await jobDao.findLastJobs(Job);
   if (!result) {
     throw new ErrorResponse(errors.NOT_FOUND, result);
   }

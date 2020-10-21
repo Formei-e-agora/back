@@ -23,7 +23,7 @@ exports.create = asyncHandler(async (req, res) => {
   return res.json({ Status: true, courseRequirementsData: result }).end();
 });
 
-exports.update = asyncHandler(async (req, res, next) => {
+exports.update = asyncHandler(async (req, res) => {
   const { courseRequirementsId } = req.params;
 
   const result = await generalDao.update(CourseRequirement, req.body, { courseRequirementsId });
@@ -47,13 +47,16 @@ exports.update = asyncHandler(async (req, res, next) => {
   return res.json({ Status: true, courseRequirementsData: result }).end();
 });
 
-exports.delete = asyncHandler(async (req, res, next) => {
+exports.delete = asyncHandler(async (req, res) => {
   const { courseRequirementsId } = req.params;
 
-  const result = await generalDao.delete(CourseRequirement, { courseRequirementsId });
-
+  const result = await generalDao.delete(CourseRequirement, courseRequirementsId);
+  console.log(result);
   if (!result) {
     throw new ErrorResponse(errors.NOT_FOUND, result);
+  }
+  if (result.name === 'Error') {
+    throw new ErrorResponse(errors.COULD_NOT_DELETE, result);
   }
   if (result.name === 'SequelizeForeignKeyConstraintError') {
     throw new ErrorResponse(errors.COULD_NOT_DELETE, result);

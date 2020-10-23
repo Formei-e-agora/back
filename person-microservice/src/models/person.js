@@ -30,20 +30,20 @@ module.exports = (sequelize, Sequelize) => {
     },
     course: {
       allowNull: true,
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
     },
     isEligible: {
       allowNull: true,
-      type: Sequelize.BOOLEAN
+      type: Sequelize.BOOLEAN,
     },
     isAdmin: {
       allowNull: true,
-      type: Sequelize.BOOLEAN
+      type: Sequelize.BOOLEAN,
     },
     department: {
       allowNull: true,
-      type: Sequelize.STRING
-    }
+      type: Sequelize.INTEGER,
+    },
   });
 
   Person.associate = function associate(models) {

@@ -54,6 +54,20 @@ async function findUnlockInfo(userId) {
   }
 }
 
+async function findAllEligibleEmail() {
+  try {
+    const response = await fetch(`${links.auth}/user/find/all/eligibleEmail`, { method: 'GET' });
+    const jsonResponse = await response.json();
+    if (jsonResponse.Status !== true) {
+      return false;
+    }
+    return jsonResponse.users;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
 async function deleteUser(userId) {
   const response = await fetch(`${links.auth}/user/delete/${userId}`, { method: 'DELETE' });
   const jsonResponse = await response.json();
@@ -64,5 +78,6 @@ module.exports = {
   createUser,
   updateUser,
   findUnlockInfo,
+  findAllEligibleEmail,
   deleteUser,
 };

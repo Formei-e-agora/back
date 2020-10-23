@@ -28,5 +28,5 @@ async function sendMostRecentJobsEmail() {
 }
 
 console.log('init send most recent jobs email job!');
-const sendMostRecentJobsEmailJob = new CronJob('0 47 10 * * *', sendMostRecentJobsEmail);
+const sendMostRecentJobsEmailJob = new CronJob('0 0 8 * * *', sendMostRecentJobsEmail);
 sendMostRecentJobsEmailJob.start();

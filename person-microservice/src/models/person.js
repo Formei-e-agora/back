@@ -8,7 +8,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     personalId: {
       allowNull: false,
-      unique: true,
+      unique: 'personalId',
       type: Sequelize.STRING,
     },
     name: {
@@ -25,7 +25,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     email: {
       allowNull: false,
-      unique: true,
+      unique: 'mail',
       type: Sequelize.STRING,
     },
     course: {

@@ -34,10 +34,8 @@ exports.delete = async (model, id) => {
   const logFilePath = path.join(__dirname, '../../../logs/dao.log');
   const action = `delete ${model.name} id=${id.id}`;
   try {
-    const result = await model.destroy({
-      where: id,
-      force: true,
-    });
+    const obj = await model.findByPk(id);
+    const result = obj.destroy({ force: true });
     logHandler.success(logFilePath, action);
     return result;
   } catch (e) {

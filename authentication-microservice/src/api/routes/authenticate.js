@@ -11,6 +11,7 @@ module.exports = (server, passport) => {
   route.get('/verify/userId/:userId', authenticate.verifyUserExists);
   route.get('/find/userId/:userId', authenticate.findByPk);
   route.get('/find/unlockInfo/userId/:userId', authenticate.findUnlockInfo);
+  route.get('/find/all/eligibleEmail', authenticate.findEligibleToEmail);
   route.get('/protected', passport.authenticate('jwt', { session: false }), authenticate.protected);
   route.post('/login', verifyMiddleware.loginLimiter, authenticate.login);
   route.post('/create', authenticate.create);

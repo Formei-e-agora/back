@@ -15,6 +15,25 @@ exports.findByUsername = async (model, username) => {
   }
 };
 
+exports.findAllStudentsEligibleEmail = async (model) => {
+  const action = `findByUsername ${model.name}`;
+  const logFilePath = path.join(__dirname, '../../../logs/dao.log');
+  try {
+    const result = await model.findAll({
+      attributes: ['userId'],
+      where: {
+        userType: 2,
+        eligibleEmail: true,
+      },
+    });
+    logHandler.success(logFilePath, action);
+    return result;
+  } catch (e) {
+    logHandler.failure(logFilePath, action, e);
+    return e;
+  }
+};
+
 exports.findByUsernameAndEmail = async (model, username, email) => {
   const action = `findByUsernameAndEmail ${model.name} username=${username} email=${email}`;
   const logFilePath = path.join(__dirname, '../../../logs/dao.log');

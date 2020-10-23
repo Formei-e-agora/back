@@ -273,6 +273,16 @@ exports.findUnlockInfo = asyncHandler(async (req, res) => {
   return res.json({ Status: true, userData: result }).end();
 });
 
+exports.findEligibleToEmail = asyncHandler(async (req, res) => {
+  const result = await userDao.findAllStudentsEligibleEmail(Users);
+  if (!result || !result.length) {
+    throw new ErrorResponse(errors.NOT_FOUND, result);
+  }
+  const users = result.map((user) => user.dataValues.userId);
+
+  return res.json({ Status: true, users }).end();
+});
+
 exports.protected = asyncHandler(async (req, res) => res.json({ Status: true }));
 
 exports.verifyUserExists = asyncHandler(async (req, res) => {

@@ -50,9 +50,7 @@ exports.update = asyncHandler(async (req, res) => {
 });
 
 exports.delete = asyncHandler(async (req, res) => {
-  const result = await generalDao.delete(Job, {
-    jobId: req.params.jobId,
-  });
+  const result = await generalDao.delete(Job, req.params.jobId);
 
   if (!result) {
     throw new ErrorResponse(errors.COULD_NOT_DELETE, result);

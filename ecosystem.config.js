@@ -36,6 +36,24 @@ module.exports = {
         NODE_ENV: 'test',
       },
     },
+    {
+      name: 'job',
+      script: './job-microservice/src/index.js',
+      exec_mode: 'cluster',
+      watch: ['./job-microservice', './helpers'],
+      ignore_watch: ['./job-microservice/logs'],
+      max_memory_restart: '200M',
+      restart_delay: 2000,
+      env: {
+        NODE_ENV: 'development',
+      },
+      env_production: {
+        NODE_ENV: 'production',
+      },
+      env_test: {
+        NODE_ENV: 'test',
+      },
+    },
   ],
 
   // deploy: {
